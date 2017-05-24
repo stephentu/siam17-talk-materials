@@ -1,0 +1,168 @@
+\documentclass[10pt]{article}
+
+%% Common Imports %%
+\usepackage{graphicx} % For images
+\usepackage{float}    % For tables and other floats
+\usepackage{verbatim} % For comments and other
+\usepackage{amsmath}  % For math
+\usepackage{amssymb}  % For more math
+\usepackage{subfig}   % For subfigures
+%\usepackage{times}
+\usepackage{fullpage}
+\usepackage{amsthm}
+\usepackage{enumerate}
+\usepackage{paralist}
+\usepackage{xspace}
+\usepackage{caption}
+\usepackage{bbm}
+\usepackage{url}
+
+%\usepackage{kpfonts}
+
+\newcommand{\xref}[1]{\S\ref{#1}}
+\newtheorem{mydef}{Definition}
+\newtheorem{myprop}{Proposition}
+\newtheorem{mylemma}{Lemma}
+\newtheorem{mycorollary}{Corollary}
+\newtheorem{myfact}{Fact}
+\newtheorem{myclaim}{Claim}
+\newtheorem{mythm}{Theorem}
+\DeclareMathOperator*{\argmin}{arg\!\min}
+\DeclareMathOperator*{\argmax}{arg\!\max}
+\DeclareMathOperator*{\sgn}{sgn}
+\DeclareMathOperator*{\supp}{supp}
+\DeclareMathOperator*{\rank}{rank}
+\DeclareMathOperator*{\diag}{diag}
+\DeclareMathOperator*{\Tr}{\mathbf{Tr}}
+\DeclareMathOperator*{\image}{Im}
+\DeclareMathOperator*{\nullspace}{Kern}
+\DeclareMathOperator*{\rowspace}{RS}
+\DeclareMathOperator*{\colspace}{CS}
+\DeclareMathOperator*{\dom}{dom}
+\DeclareMathOperator*{\closure}{cl}
+\DeclareMathOperator*{\vol}{vol}
+\DeclareMathOperator*{\Span}{span}
+%\DeclareMathOperator*{\dist}{dist}
+%\DeclareMathOperator*{\bias}{Bias}
+\newcommand{\dist}{\mathrm{dist}}
+\newcommand{\bias}{\mathrm{Bias}}
+\newcommand{\var}{\mathrm{Var}}
+
+\newcommand{\A}{\ensuremath{\mathcal{A}}}
+\newcommand{\Cset}{\ensuremath{\mathcal{C}}}
+\newcommand{\X}{\ensuremath{\mathcal{X}}}
+\newcommand{\Y}{\ensuremath{\mathcal{Y}}}
+\newcommand{\Z}{\ensuremath{\mathcal{Z}}}
+\newcommand{\R}{\ensuremath{\mathbb{R}}}
+\newcommand{\B}{\ensuremath{\mathcal{B}}}
+\newcommand{\G}{\ensuremath{\mathcal{G}}}
+\newcommand{\Q}{\ensuremath{\mathbb{Q}}}
+\newcommand{\N}{\ensuremath{\mathbb{N}}}
+\newcommand{\F}{\ensuremath{\mathcal{F}}}
+\newcommand{\I}{\ensuremath{\mathcal{I}}}
+\newcommand{\Set}{\ensuremath{\mathcal{S}}}
+\newcommand{\Hyp}{\ensuremath{\mathcal{H}}}
+\newcommand{\Loss}{\ensuremath{\mathcal{L}}}
+\newcommand{\Lagrange}{\ensuremath{\mathcal{L}}}
+\newcommand{\norm}[1]{\left\lVert #1 \right\rVert}
+\newcommand{\onenorm}[1]{\left\lVert #1 \right\rVert_{\ell_1}}
+\newcommand{\twonorm}[1]{\left\lVert #1 \right\rVert_{\ell_2}}
+\newcommand{\fronorm}[1]{\left\lVert #1 \right\rVert_{F}}
+\newcommand{\mb}[1]{\mathbf{#1}}
+\newcommand{\ip}[2]{\ensuremath{\langle #1, #2 \rangle}}
+\newcommand{\PD}[2]{\ensuremath{\frac{\partial #1}{\partial #2}}}
+\newcommand{\Var}{\mathrm{Var}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\abs}[1]{| #1 |}
+\newcommand{\floor}[1]{\lfloor #1 \rfloor}
+\newcommand{\ceil}[1]{\lceil #1 \rceil}
+\newcommand{\Normal}{\mathcal{N}}
+\newcommand{\rdraw}{\xleftarrow{\$}}
+\newcommand{\ind}{\mathbf{1}}
+\renewcommand{\vec}{\mathrm{vec}}
+\newcommand{\Sym}{\mathbf{S}}
+\newcommand{\T}{\mathsf{T}}
+
+\newcommand{\leb}{\mu}
+\renewcommand{\Pr}{\mathbb{P}}
+
+\newcommand{\smin}{\sigma_{\mathrm{min}}}
+\newcommand{\Hess}{\mathrm{Hess}}
+
+\title{Supplementary Materials for SIAM17 Talk}
+\author{Stephen Tu}
+
+\begin{document}
+\maketitle
+
+\section{Derivations}
+
+\subsection{Preliminaries}
+
+We fix an $x \in \R^n$ with $\twonorm{x} = 1$.
+Let $b = \A(xx^\T)$ where $\A(\cdot)$ is assumed to satisfy $2r$-RIP with RIP constant $\delta_{2r}$.
+The gradient update can be written as
+\begin{align}
+    u_{k+1} \gets u_k - \beta_k \A^*\A(\Delta_k) u_k \:, \:\: \Delta_k = u_ku_k^\T - xx^\T \:.
+\end{align}
+
+\subsection{The Perpendicular Direction}
+
+Using $2r$-RIP,
+assuming that $\beta_k \leq 1/\twonorm{u_k}^2$,
+\begin{align*}
+    \twonorm{P^\perp_x u_{k+1}} &= \sup_{\twonorm{v}=1} \ip{v}{P^\perp_x (I - \beta_k \A^*\A(\Delta_k)) u_k} \\
+    &= \sup_{\twonorm{v}=1} v^\T P^\perp_x u_k - \beta_k\ip{\A(P^\perp_x v u_k^\T)}{\A(\Delta_k)} \\
+    &\leq \sup_{\twonorm{v}=1} v^\T P^\perp_x u_k - \beta_k\ip{P^\perp_x vu_k^\T}{\Delta_k} + \beta_k \delta \fronorm{P^\perp_x vu_k^T}\fronorm{\Delta_k} \\
+    &= \sup_{\twonorm{v}=1} \ip{v}{P^\perp_x (I - \beta_k \Delta_k) u_k} + \beta_k \delta \twonorm{P^\perp_x v} \twonorm{u_k}\fronorm{\Delta_k} \\
+    &\leq \twonorm{P^\perp_x (I - \beta_k \Delta_k) u_k} + \beta_k \delta \twonorm{u_k}\fronorm{\Delta_k} \\
+    &= (1 - \beta_k \twonorm{u_k}^2) \twonorm{P^\perp_x u_k} + \beta_k \delta \twonorm{u_k}\fronorm{\Delta_k} \\
+    &= (1 - \beta_k \twonorm{u_k}^2) \twonorm{P^\perp_x u_k} + \beta_k \delta \twonorm{u_k}\sqrt{ (u_k^\T u_k)^2 + 1 - 2(u_k^\T x_k)^2 } \:.
+\end{align*}
+We want to understand
+when $\frac{\twonorm{P^\perp_x u_{k+1}}}{\twonorm{P^\perp_x u_k}} < 1$.
+Using the upper bound, we can study
+\begin{align*}
+  \frac{\delta \sqrt{ (u_k^\T u_k)^2 + 1 - 2(u_k^\T x_k)^2 } }{\twonorm{P^\perp_x u_k}} < \twonorm{u_k} \:.
+\end{align*}
+Let us now re-write this equation in terms of
+$\twonorm{P_x u_k}$ and $\twonorm{P^\perp_x u_k}$.
+\begin{align*}
+  \delta^2 \left( (\twonorm{P_x u_k}^2 + \twonorm{P^\perp_x u_k}^2)^2 + 1 - 2\twonorm{P_x u_k}^2 \right) < (\twonorm{P_x u_k}^2 + \twonorm{P^\perp_x u_k}^2)\twonorm{P^\perp_x u_k}^2 \:.
+\end{align*}
+Letting $x \gets \twonorm{P_x u_k}$ and
+$y \gets \twonorm{P^\perp_x u_k}$, we want first quadrant solutions to the region
+\begin{align*}
+  \delta^2( (x^2+y^2)^2 + 1 - 2x^2) < (x^2 + y^2)y^2 \:.
+\end{align*}
+
+\subsection{The Parallel Direction}
+
+Next, let us look at $\abs{x^\T u_{k+1}}$.
+By $2r$-RIP,
+\begin{align*}
+    \ip{x}{u_{k+1}} = \ip{x}{(I-\beta_k \A^*\A(\Delta_k))u_k} = \ip{x}{u_k} - \beta_k \ip{\A(\Delta_k)}{\A(xu_k^\T)} = \ip{x}{(I-\beta_k\Delta_k)u_k} + \beta_k g_k \:,
+\end{align*}
+where $\abs{g_k} \leq \delta \twonorm{u_k}\fronorm{\Delta_k}$.
+Thus by triangle inequality,
+\begin{align*}
+    \abs{x^\T u_{k+1}} \geq \abs{x^\T (I - \beta_k \Delta_k) u_k} - \beta_k \delta \twonorm{u_k} \fronorm{\Delta_k} \:.
+\end{align*}
+A quick calculation shows that
+\begin{align*}
+  x^\T ( I - \beta_k \Delta_k ) u_k = x^\T u_k (1 - \beta_k(\twonorm{u_k}^2 - 1)) \:.
+\end{align*}
+Hence for $\abs{x^\T u_k} \neq 0$,
+\begin{align*}
+  \frac{\abs{x^\T u_{k+1}}}{\abs{x^\T u_k}} \geq \abs{1 - \beta_k(\twonorm{u_k}^2 - 1)} - \frac{\beta_k \delta \twonorm{u_k} \fronorm{\Delta_k}}{\abs{x^\T u_k}} \:.
+\end{align*}
+Using the $x \gets \twonorm{P_x u_k}$ and
+$y \gets \twonorm{P^\perp_x u_k}$ substitution, the sufficient condition
+for $\frac{\twonorm{P_x u_{k+1}}}{\twonorm{P_x u_k}} > 1$ is
+\begin{align*}
+  \abs{1 - \beta_k(x^2 + y^2 - 1)} - \frac{\beta_k \delta \sqrt{x^2 + y^2} \sqrt{(x^2 + y^2)^2 + 1 - 2x^4}}{x^2} > 1 \:.
+\end{align*}
+
+
+
+\end{document}
